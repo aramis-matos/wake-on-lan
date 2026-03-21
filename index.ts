@@ -10,7 +10,7 @@ app.get("/computer/:pc", async (c) => {
 
   const authHeader = c.req.header("Authorization");
 
-  const password = await Bun.file("/run/secrets/authKey").text();
+  const password = (await Bun.file(process.env.PASSWORD_LOCATION || "/run/secrets/authKey").text()).trim();
 
   if (password !== authHeader) {
     return c.text("Not Authorized", 401);
