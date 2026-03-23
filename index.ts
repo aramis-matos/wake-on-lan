@@ -8,14 +8,6 @@ const app = new Hono();
 app.get("/computer/:pc", async (c) => {
   if (c === undefined) throw new HTTPException(500);
 
-  const authHeader = c.req.header("Authorization");
-
-  const password = (await Bun.file(process.env.PASSWORD_LOCATION || "/run/secrets/authKey").text()).trim();
-
-  if (password !== authHeader) {
-    return c.text("Not Authorized", 401);
-  }
-
   const pcMac = process.env[`${c.req.param("pc")}_MAC`];
 
   const pcAddress = process.env[`${c.req.param("pc")}_ADDRESS`];
